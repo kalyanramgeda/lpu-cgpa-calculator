@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College CGPA Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 900px;
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+        
+        .input-row {
+            display: flex;
+            margin-bottom: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #444;
+        }
+        
+        input, select, button {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .add-btn {
+            background-color: #2196F3;
+        }
+        
+        .add-btn:hover {
+            background-color: #0b7dda;
+        }
+        
+        .calculate-btn {
+            background-color: #FF9800;
+            padding: 15px;
+            font-weight: bold;
+        }
+        
+        .calculate-btn:hover {
+            background-color: #e68a00;
+        }
+        
+        .clear-btn {
+            background-color: #f44336;
+        }
+        
+        .clear-btn:hover {
+            background-color: #d32f2f;
+        }
+        
+        .result-section {
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .result {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+        
+        .course-list {
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        
+        .course-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background-color: #f5f5f5;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            align-items: center;
+        }
+        
+        .course-info {
+            flex: 1;
+        }
+        
+        .course-name {
+            font-weight: 600;
+        }
+        
+        .course-details {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .delete-btn {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .grade-scale {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 10px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .grade-scale h3 {
+            margin-bottom: 10px;
+            color: #2196F3;
+        }
+        
+        .grade-scale table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .grade-scale th, .grade-scale td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .grade-scale th {
+            background-color: #e3f2fd;
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff8e1;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: #ff9800;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .input-row {
+                flex-direction: column;
+            }
+            
+            .input-group {
+                width: 100%;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>College CGPA Calculator</h1>
+        <p class="description">Calculate your CGPA with custom subjects and credits</p>
+        
+        <div class="input-section">
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="courseName">Subject Name</label>
+                    <input type="text" id="courseName" placeholder="e.g., Mathematics">
+                </div>
+                <div class="input-group">
+                    <label for="courseCredits">Credits</label>
+                    <input type="number" id="courseCredits" placeholder="e.g., 4" min="1" max="10">
+                </div>
+                <div class="input-group">
+                    <label for="courseGrade">Grade</label>
+                    <select id="courseGrade">
+                        <option value="10">O (10)</option>
+                        <option value="9">A+ (9)</option>
+                        <option value="8">A (8)</option>
+                        <option value="7">B+ (7)</option>
+                        <option value="6">B (6)</option>
+                        <option value="5">C (5)</option>
+                        <option value="4">D (4)</option>
+                        <option value="0">E (0)</option>
+                        <option value="0">F (0)</option>
+                    </select>
+                </div>
+            </div>
+            <button class="add-btn" onclick="addCourse()">Add Subject</button>
+        </div>
+        
+        <div class="actions">
+            <button class="calculate-btn" onclick="calculateCGPA()">Calculate CGPA</button>
+            <button class="clear-btn" onclick="clearAllCourses()">Clear All Subjects</button>
+        </div>
+        
+        <div class="course-list" id="courseList">
+            <p>No subjects added yet. Add subjects using the form above.</p>
+        </div>
+        
+        <div class="result-section" id="resultSection">
+            <h2>Your CGPA is:</h2>
+            <div class="result" id="cgpaResult">0.00</div>
+        </div>
+        
+        <div class="grade-scale">
+            <h3>Grade Scale</h3>
+            <table>
+                <tr>
+                    <th>Grade</th>
+                    <th>Points</th>
+                    <th>Grade</th>
+                    <th>Points</th>
+                    <th>Grade</th>
+                    <th>Points</th>
+                </tr>
+                <tr>
+                    <td>O</td>
+                    <td>10</td>
+                    <td>B+</td>
+                    <td>7</td>
+                    <td>E</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>A+</td>
+                    <td>9</td>
+                    <td>B</td>
+                    <td>6</td>
+                    <td>F</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>A</td>
+                    <td>8</td>
+                    <td>C</td>
+                    <td>5</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>D</td>
+                    <td>4</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="instructions">
+            <h3>How to Use</h3>
+            <ol>
+                <li>Enter the subject name in the "Subject Name" field</li>
+                <li>Enter the number of credits for the subject</li>
+                <li>Select the grade you obtained from the dropdown</li>
+                <li>Click "Add Subject" to add it to your list</li>
+                <li>Repeat for all your subjects</li>
+                <li>Click "Calculate CGPA" to see your result</li>
+                <li>Use "Clear All Subjects" to start over</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        let courses = [];
+        
+        function addCourse() {
+            const courseName = document.getElementById('courseName').value;
+            const credits = parseInt(document.getElementById('courseCredits').value);
+            const grade = parseInt(document.getElementById('courseGrade').value);
+            
+            if (!courseName || isNaN(credits) || credits <= 0) {
+                alert('Please enter valid subject name and credits');
+                return;
+            }
+            
+            const course = {
+                name: courseName,
+                credits: credits,
+                grade: grade
+            };
+            
+            courses.push(course);
+            updateCourseList();
+            
+            // Clear input fields
+            document.getElementById('courseName').value = '';
+            document.getElementById('courseCredits').value = '';
+            document.getElementById('courseName').focus();
+        }
+        
+        function updateCourseList() {
+            const courseList = document.getElementById('courseList');
+            courseList.innerHTML = '';
+            
+            if (courses.length === 0) {
+                courseList.innerHTML = '<p>No subjects added yet. Add subjects using the form above.</p>';
+                return;
+            }
+            
+            courses.forEach((course, index) => {
+                const courseItem = document.createElement('div');
+                courseItem.className = 'course-item';
+                
+                const gradeText = getGradeText(course.grade);
+                
+                courseItem.innerHTML = `
+                    <div class="course-info">
+                        <div class="course-name">${course.name}</div>
+                        <div class="course-details">Credits: ${course.credits} | Grade: ${gradeText} | Points: ${course.grade}</div>
+                    </div>
+                    <button class="delete-btn" onclick="removeCourse(${index})">Delete</button>
+                `;
+                
+                courseList.appendChild(courseItem);
+            });
+        }
+        
+        function getGradeText(gradeValue) {
+            const gradeMap = {
+                10: 'O',
+                9: 'A+',
+                8: 'A',
+                7: 'B+',
+                6: 'B',
+                5: 'C',
+                4: 'D',
+                0: 'E/F'
+            };
+            
+            return gradeMap[gradeValue] || 'N/A';
+        }
+        
+        function removeCourse(index) {
+            courses.splice(index, 1);
+            updateCourseList();
+            hideResult();
+        }
+        
+        function clearAllCourses() {
+            courses = [];
+            updateCourseList();
+            hideResult();
+        }
+        
+        function calculateCGPA() {
+            if (courses.length === 0) {
+                alert('Please add at least one subject');
+                return;
+            }
+            
+            let totalCredits = 0;
+            let totalGradePoints = 0;
+            
+            courses.forEach(course => {
+                totalCredits += course.credits;
+                totalGradePoints += course.credits * course.grade;
+            });
+            
+            const cgpa = totalGradePoints / totalCredits;
+            
+            showResult(cgpa.toFixed(2));
+        }
+        
+        function showResult(cgpa) {
+            const resultSection = document.getElementById('resultSection');
+            const cgpaResult = document.getElementById('cgpaResult');
+            
+            cgpaResult.textContent = cgpa;
+            resultSection.style.display = 'block';
+            
+            // Scroll to result
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function hideResult() {
+            const resultSection = document.getElementById('resultSection');
+            resultSection.style.display = 'none';
+        }
+        
+        // Initialize the course list
+        updateCourseList();
+    </script>
+</body>
+</html>
